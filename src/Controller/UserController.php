@@ -1,14 +1,17 @@
 <?php
 
-namespace App\Controller\Command;
+namespace App\Controller;
 
+use Ecotone\Modelling\CommandBus;
 use Ramsey\Uuid\Uuid;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-class CreateUser extends AbstractController
+class UserController extends AbstractController
 {
+    public function __construct(private CommandBus $commandBus) {}
+
     #[Route('/user/create')]
     public function createUser(): Response
     {

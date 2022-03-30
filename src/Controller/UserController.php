@@ -12,7 +12,7 @@ class UserController extends AbstractController
 {
     public function __construct(private CommandBus $commandBus) {}
 
-    #[Route('/user/create')]
+    #[Route('/user/create', methods: ['POST'])]
     public function createUser(): Response
     {
         return new Response(Uuid::uuid4());

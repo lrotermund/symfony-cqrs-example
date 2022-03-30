@@ -3,6 +3,7 @@
 namespace App\Tests\Controller;
 
 use App\Controller\UserController;
+use App\Domain\User\User;
 use Ecotone\Modelling\CommandBus;
 use Ramsey\Uuid\Uuid;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
@@ -26,25 +27,28 @@ class UserControllerKernelTest extends KernelTestCase
 
     public function testCommandHandlerContainsCreateUserCommand()
     {
+        $expectedCommand = User::CREATE_USER;
+
         self::bootKernel();
 
         $container = static::getContainer();
 
-        $this->setupCommandBusMock($container);
+        $this->setupCommandBusMock($container, $expectedCommand);
 
         $userController = $container->get(UserController::class);
 
         $userController->createUser();
     }
 
-    private function setupCommandBusMock(Container $container)
+    private function setupCommandBusMock(Container $container, string $command)
     {
         $commandBusMock = $this->getMockBuilder(CommandBus::class)
             ->disableOriginalConstructor()
             ->getMock();
 
         $commandBusMock->expects($this->once())
-            ->method('sendWithRouting');
+            ->method('sendWithRouting')
+            ->with($this->any(), $this->equalTo($command));
 
         $container->set(CommandBus::class, $commandBusMock);
     }

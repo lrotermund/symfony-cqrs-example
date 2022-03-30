@@ -48,7 +48,7 @@ class UserControllerKernelTest extends KernelTestCase
 
         $commandBusMock->expects($this->once())
             ->method('sendWithRouting')
-            ->with($this->any(), $this->equalTo($command));
+            ->with($this->equalTo($command));
 
         $container->set(CommandBus::class, $commandBusMock);
     }
